@@ -160,17 +160,3 @@ The app uses Next.js's built-in caching mechanisms to improve performance:
 -   **Weaknesses.tsx:**
     
     -   Displays a Pokémon's weaknesses based on its types.
-
-## Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1.  **Fork the repository.**
-    
-2.  **Create a new branch:** `git checkout -b feature/your-feature-name` 
-    
-4.  **Make your changes and commit them:** `git commit -m 'Add some feature'` 
-    
-5.  **Push to the branch:** `git push origin feature/your-feature-name` 
-    
-6.  **Create a pull request.**
