@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { ReactElement, useState } from "react";
 import PokemonImage from "@/components/pokemon/Image";
 import TypeBadge from "@/components/common/TypeBadge";
 import Abilities from "@/components/pokemon/Abilities";
@@ -16,29 +16,29 @@ type PokemonDetailProps = {
   blurDataURL: string;
 };
 
-const PokemonDetailPage: React.FC<PokemonDetailProps> = ({ pokemon, description, weaknesses, blurDataURL }) => {
+function PokemonDetailPage({ pokemon, description, weaknesses, blurDataURL }: PokemonDetailProps): ReactElement {
   const [showGif, setShowGif] = useState(false);
   const router = useRouter();
 
   const { id, name, sprites, height, weight, abilities, types, stats } = pokemon;
 
-  // GIF URL from the sprites
+  // GIF URL from the sprites (if available)
   const gifUrl = sprites?.versions?.["generation-v"]?.["black-white"].animated.front_default || "";
 
   // Static image URL
   const staticImageUrl = sprites.other["official-artwork"].front_default || "";
 
-  // Handle image toggle
+  // Toggle between static image and GIF
   const handleToggleImage = () => {
     setShowGif(!showGif);
   };
 
-  // Handle navigation to previous/next Pokémon
+  // Navigate to previous or next Pokémon
   const handleNavigate = (newId: number) => {
     router.push(`/pokemon/${newId}`);
   };
 
-  // Calculate previous and next IDs (ensure they are within 1 and 151)
+  // Calculate previous and next IDs (wrapping around at 1 and 151)
   const prevId = id > 1 ? id - 1 : 151;
   const nextId = id < 151 ? id + 1 : 1;
 

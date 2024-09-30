@@ -1,14 +1,12 @@
 "use client";
 // This component is marked as a client component because it resides at the edge of the component tree and handles client-specific logic, without affecting server-side components or pages.
 
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { FiSun } from "react-icons/fi";
 import { FaMoon } from "react-icons/fa";
 import { useTheme } from "next-themes";
 
-// ----------------------------------------------------------------------
-
-const ToggleTheme: React.FC = () => {
+function ToggleTheme(): ReactElement {
   const [mounted, setMounted] = useState<boolean>(false);
   const { setTheme, resolvedTheme } = useTheme();
 

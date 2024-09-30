@@ -1,12 +1,10 @@
-import { FC, MouseEvent, useState } from "react";
-
-// ----------------------------------------------------------------------
+import { ReactElement, MouseEvent, useState } from "react";
 
 type RippleProps = {
   duration?: number;
 };
 
-const Ripple: FC<RippleProps> = ({ duration = 600 }) => {
+function Ripple({ duration = 600 }: RippleProps): ReactElement {
   const [ripples, setRipples] = useState<{ top: number; left: number; size: number }[]>([]);
 
   const createRipple = (event: MouseEvent<HTMLDivElement>) => {
@@ -41,6 +39,6 @@ const Ripple: FC<RippleProps> = ({ duration = 600 }) => {
       ))}
     </div>
   );
-};
+}
 
 export default Ripple;

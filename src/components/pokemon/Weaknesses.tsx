@@ -5,7 +5,7 @@ type WeaknessesProps = {
   weaknesses: string[];
 };
 
-export default function Weaknesses({ weaknesses }: WeaknessesProps) {
+ function Weaknesses({ weaknesses }: WeaknessesProps) {
   return (
     <div>
       <h3 className="text-xl font-semibold">Weaknesses</h3>
@@ -17,3 +17,5 @@ export default function Weaknesses({ weaknesses }: WeaknessesProps) {
     </div>
   );
 }
+
+export default Weaknesses; 

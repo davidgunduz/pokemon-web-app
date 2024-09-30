@@ -9,7 +9,7 @@ type StatsChartProps = {
   }[];
 };
 
-export default function StatsChart({ stats }: StatsChartProps) {
+function StatsChart({ stats }: StatsChartProps) {
   // Function to get color based on value
   const getColor = (value: number) => {
     if (value <= 50) return "bg-gradient-to-r from-red-400 to-red-600";
@@ -49,7 +49,6 @@ export default function StatsChart({ stats }: StatsChartProps) {
     <div className="mt-4">
       {stats.map((stat) => {
        const statName = formatStatName(stat.stat.name);
-        console.log(statName);
         const isHP = statName === "HP";
         const { min, max } = calculateMinMax(stat.base_stat, isHP);
         const colorClass = getColor(stat.base_stat);
@@ -79,3 +78,5 @@ export default function StatsChart({ stats }: StatsChartProps) {
     </div>
   );
 }
+
+export default StatsChart; 

@@ -1,14 +1,16 @@
 
 import { PokemonDetailSchema, PokemonSpeciesSchema } from "@/models/pokemon";
 import PokemonDetailPage from "./pokemonDetailPage";
-import getBase64 from "@/utils/getBase64";
+import placeholders from "../../../../placeholders.json";
 
 // Server-side data fetching for Pokémon details.
 async function PokemonDetail({ params }: { params: { id: string } }) {
+  const placeholdersTyped: { [key: string]: string } = placeholders;
+
   const { id } = params;
 
   try {
-    // Fetch Pokémon data
+    // Fetch Pokémon data with caching enabled (revalidate every 60 seconds)
     const resPokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`, {
       next: { revalidate: 60 },
     });
@@ -28,34 +30,19 @@ async function PokemonDetail({ params }: { params: { id: string } }) {
     const speciesData = await resSpecies.json();
     const parsedSpecies = PokemonSpeciesSchema.parse(speciesData);
 
-    // Extract the English description
-    const descriptionEntry = parsedSpecies.flavor_text_entries.find(
-      (entry) => entry.language.name === "en"
-    );
-    const description =
-      descriptionEntry?.flavor_text.replace(/\f/g, " ") || "No description available.";
+    // Extract the English description, replacing special characters
+    const descriptionEntry = parsedSpecies.flavor_text_entries.find((entry) => entry.language.name === "en");
+    const description = descriptionEntry?.flavor_text.replace(/\f/g, " ") || "No description available.";
 
-    // Fetch weaknesses
+    // Fetch weaknesses based on Pokémon types
     const weaknesses = await fetchWeaknesses(parsedPokemon.types);
 
-    // Generate the blurDataURL
-    const imageUrl = parsedPokemon?.sprites?.other["official-artwork"].front_default || "";
-    let blurDataURL = "";
-    try {
-      blurDataURL = await getBase64(imageUrl);
-    } catch (error) {
-      console.error(`Failed to generate blurDataURL for image:`, error);
-    }
+    // Get the pre-generated blurDataURL for the Pokémon image
+    const pokemonId = parsedPokemon.id.toString();
+    const blurDataURL = placeholdersTyped[pokemonId] || "";
 
     // Pass all the necessary data to the client component
-    return (
-      <PokemonDetailPage
-        pokemon={parsedPokemon}
-        description={description}
-        weaknesses={weaknesses}
-        blurDataURL={blurDataURL}
-      />
-    );
+    return <PokemonDetailPage pokemon={parsedPokemon} description={description} weaknesses={weaknesses} blurDataURL={blurDataURL} />;
   } catch (error) {
     console.error(error);
     return (
@@ -71,7 +58,7 @@ async function PokemonDetail({ params }: { params: { id: string } }) {
 async function fetchWeaknesses(types: { type: { name: string; url: string } }[]) {
   const weaknessesSet = new Set<string>();
 
-  // Fetch type data in parallel
+  // Fetch type data in parallel for efficiency
   const typePromises = types.map(({ type }) =>
     fetch(type.url)
       .then((res) => {
@@ -88,6 +75,7 @@ async function fetchWeaknesses(types: { type: { name: string; url: string } }[])
 
   const typeDataArray = await Promise.all(typePromises);
 
+  // Collect weaknesses from type data
   typeDataArray.forEach((typeData) => {
     if (typeData) {
       typeData.damage_relations.double_damage_from.forEach((weakType: { name: string }) => {

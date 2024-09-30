@@ -6,7 +6,7 @@ import PokemonSearchBar from "./pokemon/Searchbar";
 
 // ----------------------------------------------------------------------
 
-const Header: React.FC = () => {
+function Header(): React.ReactElement {
   return (
     <header className="fixed top-0 left-0 z-50 w-full">
       <div

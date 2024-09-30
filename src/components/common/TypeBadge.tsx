@@ -26,14 +26,10 @@ type TypeBadgeProps = {
   type: string;
 };
 
-export default function TypeBadge({ type }: TypeBadgeProps) {
-  const colorClass = typeColors[type] || 'bg-gray-500';
+ function TypeBadge({ type }: TypeBadgeProps) {
+   const colorClass = typeColors[type] || "bg-gray-500";
 
-  return (
-    <span
-      className={`text-white px-2 py-1 rounded ${colorClass} capitalize text-sm font-semibold`}
-    >
-      {type}
-    </span>
-  );
-}
+   return <span className={`text-white px-2 py-1 rounded ${colorClass} capitalize text-sm font-semibold`}>{type}</span>;
+ }
+
+ export default TypeBadge;

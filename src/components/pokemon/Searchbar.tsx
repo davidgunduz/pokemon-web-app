@@ -3,11 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import capitalizeFirstLetter from "@/utils/capitalize";
-
-type Pokemon = {
-  name: string;
-  id: string;
-};
+import { Pokemon } from "@/models/pokemon";
 
 function PokemonSearchBar(): React.ReactElement {
   const [searchTerm, setSearchTerm] = useState("");
@@ -25,17 +21,18 @@ function PokemonSearchBar(): React.ReactElement {
         return;
       }
       const data = await response.json();
-      const speciesList = data.pokemon_species;
+      const speciesList: Pokemon[] = data.pokemon_species;
 
       // Sort and map the species list
-      const sortedPokemon = speciesList
-        .sort((a: any, b: any) => {
+      const sortedPokemon: Pokemon[] = speciesList
+        .sort((a, b) => {
           const idA = parseInt(a.url.split("/")[6], 10);
           const idB = parseInt(b.url.split("/")[6], 10);
           return idA - idB;
         })
-        .map((pokemon: any) => ({
+        .map((pokemon) => ({
           name: pokemon.name,
+          url: pokemon.url,
           id: pokemon.url.split("/")[6],
         }));
 
@@ -67,13 +64,10 @@ function PokemonSearchBar(): React.ReactElement {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "ArrowDown") {
-      // Move the active suggestion down
       setActiveSuggestionIndex((prevIndex) => (prevIndex < suggestions.length - 1 ? prevIndex + 1 : prevIndex));
     } else if (e.key === "ArrowUp") {
-      // Move the active suggestion up
       setActiveSuggestionIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
     } else if (e.key === "Enter" && activeSuggestionIndex >= 0) {
-      // Select the active suggestion on Enter
       handleSelect(suggestions[activeSuggestionIndex]);
     }
   };
@@ -84,7 +78,7 @@ function PokemonSearchBar(): React.ReactElement {
         type="text"
         value={searchTerm}
         onChange={handleChange}
-        onKeyDown={handleKeyDown} // Add keydown event listener
+        onKeyDown={handleKeyDown}
         placeholder="Search Pokémon..."
         className="w-full px-4 py-2 border placeholder-gray-500 dark:placeholder-gray-400 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
       />

@@ -19,10 +19,13 @@ ZodError: [
   }
 ] */
 
+  
 // Basic Pokémon schema
 export const PokemonSchema = z.object({
   name: z.string(),
   url: z.string().url(),
+  id: z.string(),
+
 });
 
 export type Pokemon = z.infer<typeof PokemonSchema>;

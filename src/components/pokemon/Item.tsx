@@ -5,14 +5,18 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Ripple from '../common/Ripple';
 
-type PokemonItemProps = {
-  pokemon: {
-    id: string;
-    name: string;
-  };
+type PokemonWithBlur = {
+  name: string;
+  url: string;
+  id: string;
+  blurDataURL: string;
 };
 
-export default function PokemonItem({ pokemon }: PokemonItemProps) {
+interface PokemonItemProps {
+  pokemon: PokemonWithBlur;
+}
+
+function PokemonItem({ pokemon }: PokemonItemProps) {
   const { id, name } = pokemon;
 
   if (!id) {
@@ -39,3 +43,4 @@ export default function PokemonItem({ pokemon }: PokemonItemProps) {
     </Link>
   );
 }
+export default PokemonItem;
