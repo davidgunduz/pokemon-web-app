@@ -2,26 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+.animate-ripple {
+  position: absolute;
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+  pointer-events: none;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
